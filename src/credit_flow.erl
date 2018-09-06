@@ -28,8 +28,8 @@
 %% is itself blocked - thus the only processes that need to check
 %% blocked/0 are ones that read from network sockets.
 %%
-%% Credit flows left to right when process send messags down the
-%% chain, starting at the rabbit_reader, ending at the msg_store:
+%% Credit flows left to right when processes send messages down the chain,
+%% starting at the rabbit_reader, ending at the msg_store:
 %%  reader -> channel -> queue_process -> msg_store.
 %%
 %% If the message store has a back log, then it will block the
@@ -107,12 +107,12 @@
                                   {process_info, erlang:process_info(SELF)},
                                   {from, FROM},
                                   {from_info, erlang:process_info(FROM)},
-                                  {timestamp, os:system_time(milliseconds)}])).
+                                  {timestamp, os:system_time(millisecond)}])).
 -define(TRACE_UNBLOCKED(SELF, FROM),
         credit_flow_event:notify(credit_flow_unblocked,
                                  [{process, SELF},
                                   {from, FROM},
-                                  {timestamp, os:system_time(milliseconds)}])).
+                                  {timestamp, os:system_time(millisecond)}])).
 -else.
 -define(TRACE_BLOCKED(SELF, FROM), ok).
 -define(TRACE_UNBLOCKED(SELF, FROM), ok).
