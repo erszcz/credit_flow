@@ -52,9 +52,9 @@
 -define(DEFAULT_CREDIT,
         case get(credit_flow_default_credit) of
             undefined ->
-                Val = rabbit_misc:get_env(rabbit, credit_flow_default_credit,
-                                           {?DEFAULT_INITIAL_CREDIT,
-                                            ?DEFAULT_MORE_CREDIT_AFTER}),
+                Val = application:get_env(credit_flow, default_credit,
+                                          {?DEFAULT_INITIAL_CREDIT,
+                                           ?DEFAULT_MORE_CREDIT_AFTER}),
                 put(credit_flow_default_credit, Val),
                 Val;
             Val       -> Val
@@ -101,20 +101,18 @@
 -define(STATE_CHANGE_INTERVAL, 1000000).
 
 -ifdef(CREDIT_FLOW_TRACING).
--define(TRACE_BLOCKED(SELF, FROM), rabbit_event:notify(credit_flow_blocked,
-                                     [{process, SELF},
-                                      {process_info, erlang:process_info(SELF)},
-                                      {from, FROM},
-                                      {from_info, erlang:process_info(FROM)},
-                                      {timestamp,
-                                       os:system_time(
-                                         milliseconds)}])).
--define(TRACE_UNBLOCKED(SELF, FROM), rabbit_event:notify(credit_flow_unblocked,
-                                       [{process, SELF},
-                                        {from, FROM},
-                                        {timestamp,
-                                         os:system_time(
-                                           milliseconds)}])).
+-define(TRACE_BLOCKED(SELF, FROM),
+        credit_flow_event:notify(credit_flow_blocked,
+                                 [{process, SELF},
+                                  {process_info, erlang:process_info(SELF)},
+                                  {from, FROM},
+                                  {from_info, erlang:process_info(FROM)},
+                                  {timestamp, os:system_time(milliseconds)}])).
+-define(TRACE_UNBLOCKED(SELF, FROM),
+        credit_flow_event:notify(credit_flow_unblocked,
+                                 [{process, SELF},
+                                  {from, FROM},
+                                  {timestamp, os:system_time(milliseconds)}])).
 -else.
 -define(TRACE_BLOCKED(SELF, FROM), ok).
 -define(TRACE_UNBLOCKED(SELF, FROM), ok).

@@ -14,9 +14,7 @@
 %% Copyright (c) 2007-2017 Pivotal Software, Inc.  All rights reserved.
 %%
 
--module(rabbit_event).
-
--include("rabbit.hrl").
+-module(credit_flow_event).
 
 -export([start_link/0]).
 -export([init_stats_timer/2, init_disabled_stats_timer/2,
@@ -31,6 +29,7 @@
 %%----------------------------------------------------------------------------
 
 -record(state, {level, interval, timer}).
+-record(event, {type, props, reference = undefined, timestamp}).
 
 %%----------------------------------------------------------------------------
 
@@ -51,7 +50,12 @@
 -type container() :: tuple().
 -type pos() :: non_neg_integer().
 
--spec start_link() -> rabbit_types:ok_pid_or_error().
+-type(ok(A) :: {'ok', A}).
+-type(error(A) :: {'error', A}).
+-type(ok_or_error2(A, B) :: ok(A) | error(B)).
+-type(ok_pid_or_error() :: ok_or_error2(pid(), any())).
+
+-spec start_link() -> ok_pid_or_error().
 -spec init_stats_timer(container(), pos()) -> container().
 -spec init_disabled_stats_timer(container(), pos()) -> container().
 -spec ensure_stats_timer(container(), pos(), term()) -> container().
@@ -103,9 +107,9 @@ start_link() ->
 %%   notify(stats)
 
 init_stats_timer(C, P) ->
-    %% If the rabbit app is not loaded - use default none:5000
-    StatsLevel = application:get_env(rabbit, collect_statistics, none),
-    Interval   = application:get_env(rabbit, collect_statistics_interval, 5000),
+    %% If the credit_flow app is not loaded - use default none:5000
+    StatsLevel = application:get_env(credit_flow, collect_statistics, none),
+    Interval   = application:get_env(credit_flow, collect_statistics_interval, 5000),
     setelement(P, C, #state{level = StatsLevel, interval = Interval,
                             timer = undefined}).
 
