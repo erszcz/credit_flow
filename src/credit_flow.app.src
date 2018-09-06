@@ -1,5 +1,5 @@
 {application, credit_flow,
- [{description, "An OTP library"},
+ [{description, "RabbitMQ's flow control aka back pressure mechanism in a standalone library"},
   {vsn, "0.1.0"},
   {registered, []},
   {applications,
@@ -9,7 +9,10 @@
   {env,[]},
   {modules, []},
 
-  {maintainers, []},
-  {licenses, ["Apache 2.0"]},
-  {links, []}
+  {maintainers, ["Radek Szymczyszyn <radoslaw.szymczyszyn@erlang-solutions.com>"]},
+  {licenses, ["MPL 1.1"]},
+  {links, [{"Credit Flow for Erlang Processes by Alvaro Videla",
+            "http://alvaro-videla.com/2013/09/rabbitmq-internals-credit-flow-for-erlang-processes.html"},
+           {"RabbitMQ", "https://www.rabbitmq.com/"},
+           {"GitHub", "https://github.com/erszcz/credit_flow"}]}
  ]}.
