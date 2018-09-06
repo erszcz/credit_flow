@@ -1,5 +1,5 @@
 {application, credit_flow,
- [{description, "RabbitMQ's flow control aka back pressure mechanism in a standalone library"},
+ [{description, "RabbitMQ's flow control mechanism as a standalone library"},
   {vsn, "0.1.0"},
   {registered, []},
   {applications,

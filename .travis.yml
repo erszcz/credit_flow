@@ -1,0 +1,17 @@
+language: erlang
+
+notifications:
+  email: erlang.docsh@gmail.com
+
+sudo: required
+
+services:
+  - docker
+
+otp_release:
+  - 21.0
+  - 20.3
+  - 19.3
+
+script:
+  - ./rebar3 ct
